@@ -12,7 +12,6 @@ For more information, please visit the project's [website](https://claimed-frame
 
 
 
-# CLAIMED - The Component Library for AI, Machine Learning, ETL, and Data Science
 ---
 **TL;DR** [Video on YouTube](https://www.youtube.com/watch?v=IhrIzLgY-Cg)
 - set of re-usable coarse-grained components (just a bunch of code)
