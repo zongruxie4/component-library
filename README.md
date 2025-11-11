@@ -16,11 +16,6 @@
 
 To learn more on how this library works in practice, please have a look at the following [video](https://www.youtube.com/watch?v=FuV2oG55C5s)
 
-## Related work
-[Ploomber](https://github.com/ploomber/ploomber)
-
-[Orchest](https://www.orchest.io/)
-
 ## Getting started 
 
 ### Install
