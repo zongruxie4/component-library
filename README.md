@@ -2,7 +2,6 @@
 [![GitHub](https://img.shields.io/badge/issue_tracking-github-blue.svg)](https://github.com/claimed-framework/component-library/issues)
 
 
-
 # C3 - the CLAIMED Component Compiler
 
 **TL;DR**
@@ -13,6 +12,26 @@
 - creates Kubernetes job configs for execution on Kubernetes/Openshift clusters
 - can be triggered from CICD pipelines
 
+
+C3 (CLAIMED Component Compiler) is the central project of the CLAIMED framework.
+It automates the transformation of arbitrary code assets — such as Jupyter notebooks, Python scripts, or R scripts — into fully portable, executable AI components.
+
+While the component library is now maintained primarily as an example repository, C3 is where active development and innovation take place.
+The most utilized and powerful feature of C3 is grid compute parallelization, enabling distributed execution of AI workloads across heterogeneous compute environments.
+
+## MLX Integration
+
+The Machine Learning eXchange (MLX) is now fully integrated as the backend for C3’s grid computing system, responsible for tracking all assets, including:
+
+- data
+
+- models
+
+- jobs
+
+- and other related resources
+
+This integration allows C3 to seamlessly manage asset lifecycle, provenance, and discovery within a unified infrastructure.
 
 To learn more on how this library works in practice, please have a look at the following [video](https://www.youtube.com/watch?v=FuV2oG55C5s)
 
