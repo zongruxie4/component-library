@@ -253,6 +253,7 @@ def create_operator(file_path: str,
                     platform='linux/amd64',
                     dockerfile='Dockerfile.generated',
                     image_version='python3.12',
+                    skip_docker_build=False,
                     ):
     logging.info('Parameters: ')
     logging.info('file_path: ' + file_path)
@@ -375,60 +376,61 @@ def create_operator(file_path: str,
         local_mode = True
         repository = 'local'
 
-    if subprocess.run('docker buildx', shell=True, stdout=subprocess.PIPE).returncode == 0:
-        # Using docker buildx
-        logging.debug('Using docker buildx')
-        build_command = f'docker buildx build -f {dockerfile}'
-    else:
-        logging.debug('Using docker build. Consider installing docker-buildx.')
-        build_command = f'docker build -f {dockerfile}'
-
-    logging.info(f'Building container image claimed-{name}:{version}')
-    try:
-        # Run docker build
-        subprocess.run(
-            f"{build_command} --platform {platform} -t claimed-{name}:{version} . {'--no-cache' if no_cache else ''}",
-            stdout=None if log_level == 'DEBUG' else subprocess.PIPE, check=True, shell=True
-        )
-        if repository is not None:
-            # Run docker tag
-            logging.debug(f'Tagging images with "latest" and "{version}"')
-            subprocess.run(
-                f"docker tag claimed-{name}:{version} {repository}/claimed-{name}:{version}",
-                stdout=None if log_level == 'DEBUG' else subprocess.PIPE, check=True, shell=True,
-            )
-            subprocess.run(
-                f"docker tag claimed-{name}:{version} {repository}/claimed-{name}:latest",
-                stdout=None if log_level == 'DEBUG' else subprocess.PIPE, check=True, shell=True,
-            )
-    except Exception as err:
-        logging.error('Docker build failed. Consider running C3 with `--log_level DEBUG` to see the docker build logs.')
-        if not keep_generated_files:
-            remove_temporary_files(file_path, target_code)
-        raise err
-    logging.info(f'Successfully built image claimed-{name}:{version}')
-
-    if local_mode:
-        logging.info(f'No repository provided, skip docker push.')
-    else:
-        logging.info(f'Pushing images to registry {repository}')
+    if not skip_docker_build:                   
+        if subprocess.run('docker buildx', shell=True, stdout=subprocess.PIPE).returncode == 0:
+            # Using docker buildx
+            logging.debug('Using docker buildx')
+            build_command = f'docker buildx build -f {dockerfile}'
+        else:
+            logging.debug('Using docker build. Consider installing docker-buildx.')
+            build_command = f'docker build -f {dockerfile}'
+    
+        logging.info(f'Building container image claimed-{name}:{version}')
         try:
-            # Run docker push
+            # Run docker build
             subprocess.run(
-                f"docker push {repository}/claimed-{name}:latest",
-                stdout=None if log_level == 'DEBUG' else subprocess.PIPE, check=True, shell=True,
+                f"{build_command} --platform {platform} -t claimed-{name}:{version} . {'--no-cache' if no_cache else ''}",
+                stdout=None if log_level == 'DEBUG' else subprocess.PIPE, check=True, shell=True
             )
-            subprocess.run(
-                f"docker push {repository}/claimed-{name}:{version}",
-                stdout=None if log_level == 'DEBUG' else subprocess.PIPE, check=True, shell=True,
-            )
-            logging.info('Successfully pushed image to registry')
+            if repository is not None:
+                # Run docker tag
+                logging.debug(f'Tagging images with "latest" and "{version}"')
+                subprocess.run(
+                    f"docker tag claimed-{name}:{version} {repository}/claimed-{name}:{version}",
+                    stdout=None if log_level == 'DEBUG' else subprocess.PIPE, check=True, shell=True,
+                )
+                subprocess.run(
+                    f"docker tag claimed-{name}:{version} {repository}/claimed-{name}:latest",
+                    stdout=None if log_level == 'DEBUG' else subprocess.PIPE, check=True, shell=True,
+                )
         except Exception as err:
-            logging.error(f'Could not push images to namespace {repository}. '
-                          f'Please check if docker is logged in or select a namespace with access.')
+            logging.error('Docker build failed. Consider running C3 with `--log_level DEBUG` to see the docker build logs.')
             if not keep_generated_files:
                 remove_temporary_files(file_path, target_code)
             raise err
+        logging.info(f'Successfully built image claimed-{name}:{version}')
+    
+        if local_mode:
+            logging.info(f'No repository provided, skip docker push.')
+        else:
+            logging.info(f'Pushing images to registry {repository}')
+            try:
+                # Run docker push
+                subprocess.run(
+                    f"docker push {repository}/claimed-{name}:latest",
+                    stdout=None if log_level == 'DEBUG' else subprocess.PIPE, check=True, shell=True,
+                )
+                subprocess.run(
+                    f"docker push {repository}/claimed-{name}:{version}",
+                    stdout=None if log_level == 'DEBUG' else subprocess.PIPE, check=True, shell=True,
+                )
+                logging.info('Successfully pushed image to registry')
+            except Exception as err:
+                logging.error(f'Could not push images to namespace {repository}. '
+                              f'Please check if docker is logged in or select a namespace with access.')
+                if not keep_generated_files:
+                    remove_temporary_files(file_path, target_code)
+                raise err
 
     # Check for existing files and optionally modify them before overwriting
     try:
@@ -520,6 +522,7 @@ def main():
         platform=args.platform,
         dockerfile=args.dockerfile,
         image_version=args.image_version,
+        skip_docker_build=args.skip_docker_build,
     )
 
 
