@@ -1,10 +1,3 @@
-# Merged pyproject.toml for the unified `claimed` + `terratorch-iterate` repo.
-#
-# Project identity stays `claimed` (this repo is the umbrella). The
-# `terratorch_iterate` package is added alongside the existing `c3` and
-# `claimed` packages, and the `iterate` / `iterate-classic` console scripts
-# are exposed in addition to the existing `c3_*` / `claimed` ones.
-
 [build-system]
 requires = ["setuptools>=77.0.3", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
@@ -52,7 +45,8 @@ dependencies = [
   "boto3",
   "s3fs",
   "tqdm>=4.66.3",
-  # ── terratorch-iterate core ─────────────────────────────────────────────
+  "toml",
+  # ── iterate core ─────────────────────────────────────────────
   "terratorch>=1.1.0",
   "requests>=2.32.0",
   "Jinja2>=3.1.5",
