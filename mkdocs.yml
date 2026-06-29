@@ -68,6 +68,7 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - Roadmap: roadmap.md
   - Getting Started: getting-started.md
   - CLI Reference: cli.md
   - C3 – Component Compiler:
