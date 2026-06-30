@@ -158,7 +158,7 @@ To run a benchmark over a ray cluster (which must be created before running), us
 To check the experiment results, use `mlflow ui --host $(hostname -f) --port <port> --backend-store-uri <storage_uri>` and click the link.
 ![mlflow demo](images/mlflow.png)
 
-## :::benchmark.backbone_benchmark.benchmark_backbone
+## :::terratorch_iterate.backbone_benchmark.benchmark_backbone
 
 ## Default and Task specification
 
@@ -166,15 +166,15 @@ Under each of these, as well as for the `optimization_space`, the structure of p
 
 An exception is made for `batch_size` in `optimization_space`, which should be passed in the root level and is not passed to the `terratorch_task`.
 
-### :::benchmark.benchmark_types.Defaults
+### :::terratorch_iterate.benchmark_types.Defaults
 
-### :::benchmark.benchmark_types.Task
+### :::terratorch_iterate.benchmark_types.Task
 
-## :::benchmark.benchmark_types.ParameterBounds
+## :::terratorch_iterate.benchmark_types.ParameterBounds
 
-## :::benchmark.benchmark_types.TaskTypeEnum
+## :::terratorch_iterate.benchmark_types.TaskTypeEnum
 
-## :::benchmark.benchmark_types.ParameterTypeEnum
+## :::terratorch_iterate.benchmark_types.ParameterTypeEnum
 
 ## Credits
 
